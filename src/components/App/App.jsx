@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PropTypes from 'prop-types';
 
 import { Container, GalleryContainer } from './App.styled';
+
 import { Searchbar } from '../Searchbar';
+import { ImageGallery } from '../ImageGallery'
+import {Button} from '../Button'
 
 export class App extends Component {
 
@@ -31,44 +34,45 @@ export class App extends Component {
    
   }
   
- onChangeInput = (event) => {
-    const value = event.currentTarget.value.toLowerCase().trim();
-     this.setState({
-      query: value,
-       });
-
-    }
 
   onSubmitForm = (event) => {
     event.preventDefault();
 
-    if (this.state.query === '') {
-      toast.error('Please enter your request.', {
-    position: toast.POSITION.TOP_RIGHT
-});
-    }
+    const value = event.target.query.value.toLowerCase().trim();
+    this.setState({
+      query: value,
+    },
+      () => {
 
-    // this.props.onSubmit(this.state.query, this.state.page);
-    console.log(this.state);
-    this.resetForm();
+        if (this.state.query === '') {
+          toast.error('Please enter your request.', {
+            position: toast.POSITION.TOP_RIGHT
+          });
+        }
+        this.resetForm();
+        
+      });    
   };
 
   resetForm = () => {
     this.setState({
       query: '',
       page: 1,
+    }, () => {
+      // console.log(this.state.query);
     });
   };
     
   render() {
-     const { query } = this.state;
+     const { query, page } = this.state;
 
     return (
       <Container>
-        <Searchbar value={query} onChangeInput={ this.onChangeInput} onSubmitForm={this.onSubmitForm} />
+        <Searchbar onSubmitForm={this.onSubmitForm} />
         <GalleryContainer>
-           
+           <ImageGallery/>
         </GalleryContainer>       
+        <Button/>
       </Container>
     );
   }

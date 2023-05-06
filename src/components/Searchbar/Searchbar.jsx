@@ -5,7 +5,8 @@ import { Header, SearchForm, SearchFormButton, ButtonLabel, Input} from './Searc
 
 
 
-export const Searchbar = ({ value, onSubmitForm, onChangeInput}) => {
+export const Searchbar = ({ onSubmitForm }) => {
+    
     return (
         <Header>
             <SearchForm onSubmit={onSubmitForm}>
@@ -16,21 +17,20 @@ export const Searchbar = ({ value, onSubmitForm, onChangeInput}) => {
                 <Input
                     type="text"
                     name="query"
-                    value={value}
-                    onChange={onChangeInput}
+                    defaultValue=""
+                    // value={}
+                    // onChange={() => { }}
                     autoComplete="off"
                     autoFocus
                     placeholder="Search images and photos"
                 />
             </SearchForm>
-            <ToastContainer autoClose={1000} theme={'colored'} />
+            <ToastContainer autoClose={2000} />
         </Header>
     );
 }
 
 Searchbar.propTypes = {
     onSubmitForm: PropTypes.func.isRequired,
-    onChangeInput: PropTypes.func.isRequired,
-    value: PropTypes.string.isRequired, 
-    
+
 };

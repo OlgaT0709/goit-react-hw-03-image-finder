@@ -1,13 +1,15 @@
 import PropTypes from 'prop-types';
-import { } from './ImageGallery.styled';
+import { Gallery } from './ImageGallery.styled';
+import {ImageCalleryItem} from '../ImageGalleryItem'
 
-
-
-export const ImageGallery = ({}) => {
+export const ImageGallery = ({ }) => {
+    const link = "";
+    const name = "";
+    
     return (
-        <>
-            
-        </>
+        <Gallery>
+            <ImageCalleryItem link={link} name={name} />
+        </Gallery>
     );
 }
 
