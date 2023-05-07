@@ -28,8 +28,30 @@ export class App extends Component {
   }
 
   async componentDidUpdate(prevProps, prevState) {
+    const nextQuery = this.state.query;
+    const prevQuery = prevState.query;
     const nextPage = this.state.page;
     const prevPage = prevState.page;
+
+    if (nextQuery !== prevQuery && nextQuery !== '') {
+      this.toggleLoading();
+
+      try {
+        const images = await apiService.fetchPhoto();
+        if (images.hits.length === 0) {
+          this.errorMessage();
+
+        } else {
+          this.updateImages(images);
+          console.log('componentDidUpdate QueryChanged после updateImages');
+          console.log(this.state);
+        }
+      } catch (error) {
+        catchError(error);
+      }
+      this.toggleLoading();
+    }
+
 
     
     if (nextPage !== prevPage) {
@@ -42,7 +64,7 @@ export class App extends Component {
 
         } else {
           this.updateImages(images);
-          console.log('componentDidUpdate после updateImages');
+          console.log('componentDidUpdate PageChanged после updateImages');
           console.log(this.state);
         }
       } catch (error) {
@@ -56,9 +78,7 @@ export class App extends Component {
 
   onSubmitForm = (values) => {
   const value = values.query?.toLowerCase()?.trim() || '';
-    this.resetGallery();
-            console.log('onSubmitForm после resetGallery');
-            console.log(this.state);
+  this.resetGallery() 
   this.setState(
     {
       query: value,
@@ -71,11 +91,6 @@ export class App extends Component {
       } else {
 
         apiService.query = this.state.query;
-          console.log('onSubmitForm до incrementPage');
-            console.log(this.state);
-        this.incrementPage();
-        console.log('onSubmitForm после incrementPage');
-            console.log(this.state);
         this.resetForm();
       }
     }
@@ -95,7 +110,7 @@ export class App extends Component {
     const refsGalleryContainer =  document.querySelector('#galleryContainer');
     const { height: cardHeight } = refsGalleryContainer.firstElementChild.getBoundingClientRect();
     window.scrollBy({
-        top: cardHeight * 2,
+        top: cardHeight * 1,
         behavior: "smooth",
     });
 
