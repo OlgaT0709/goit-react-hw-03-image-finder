@@ -64,8 +64,8 @@ export class App extends Component {
 
         } else {
           this.updateImages(images);
-          console.log('componentDidUpdate PageChanged после updateImages');
-          console.log(this.state);
+          // console.log('componentDidUpdate PageChanged после updateImages');
+          // console.log(this.state);
         }
       } catch (error) {
         catchError(error);
@@ -78,12 +78,16 @@ export class App extends Component {
 
   onSubmitForm = (values) => {
   const value = values.query?.toLowerCase()?.trim() || '';
-  this.resetGallery() 
+    this.resetGallery() 
+    console.log('onSubmitForm  после resetGallery');
+    console.log(this.state);
   this.setState(
     {
       query: value,
     },
     () => {
+      console.log('onSubmitForm  после setStates');
+      console.log(this.state);
       if (this.state.query === "") {
         toast.error("Please enter your request.", {
           position: toast.POSITION.TOP_RIGHT,
@@ -92,6 +96,8 @@ export class App extends Component {
 
         apiService.query = this.state.query;
         this.resetForm();
+      console.log('onSubmitForm  после resetForm');
+      console.log(this.state);
       }
     }
   );
