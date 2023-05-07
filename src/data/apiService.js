@@ -10,7 +10,7 @@ class ApiService {
     constructor() {
         this.searchQuery = '';
         this.pageNumber = 1;
-        this.perPage = 12;
+        this.perPage = 2;
     }
 
     async fetchPhoto() {    

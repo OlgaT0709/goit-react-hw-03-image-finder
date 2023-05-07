@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { Form, Field } from 'formik';
 
     // padding: ${props => props.theme.spacing(2)};
     // background-color: ${props => props.theme.colors.lightGrey};
@@ -25,7 +26,7 @@ export const Header = styled.header`
 `;
 
 
- export const SearchForm = styled.form` 
+ export const SearchForm = styled(Form)` 
   display: flex;
   align-items: center;
   width: 100%;
@@ -67,7 +68,7 @@ export const ButtonLabel= styled.span`
   border: 0;
 `;
 
-export const Input= styled.input`
+export const Input= styled(Field)`
   display: inline-block;
   width: 100%;
   font: inherit;

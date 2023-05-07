@@ -42,7 +42,7 @@ export class App extends Component {
 
         } else {
           this.updateImages(images);
-  
+          console.log('componentDidUpdate после updateImages');
           console.log(this.state);
         }
       } catch (error) {
@@ -54,33 +54,33 @@ export class App extends Component {
   }
 
 
-  onSubmitForm = (event) => {
-    event.preventDefault();
-    const value = event.target.query.value.toLowerCase().trim();
-    this.resetGallary();
-    this.setState({
+  onSubmitForm = (values) => {
+  const value = values.query?.toLowerCase()?.trim() || '';
+    this.resetGallery();
+            console.log('onSubmitForm после resetGallery');
+            console.log(this.state);
+  this.setState(
+    {
       query: value,
     },
-      () => {
+    () => {
+      if (this.state.query === "") {
+        toast.error("Please enter your request.", {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      } else {
 
-        if (this.state.query === '') {
-          toast.error('Please enter your request.', {
-            position: toast.POSITION.TOP_RIGHT
-          });
-          this.resetGallary();
-
-        } else {
+        apiService.query = this.state.query;
+          console.log('onSubmitForm до incrementPage');
             console.log(this.state);
-            apiService.query = this.state.query;
-            this.inrementPage();
-            this.resetForm();
-         
-        };
-        
-      });    
-    
-      
-  };
+        this.incrementPage();
+        console.log('onSubmitForm после incrementPage');
+            console.log(this.state);
+        this.resetForm();
+      }
+    }
+  );
+};
 
   errorMessage = () => {
     toast.error('Incorrect request , please try again.', {
@@ -89,7 +89,7 @@ export class App extends Component {
   };
 
   loadMore = () => {
-    this.inrementPage()
+    this.incrementPage()
 
     // плавне прокручування сторінки після запиту і відтворення кожної наступної групи зображень
     const refsGalleryContainer =  document.querySelector('#galleryContainer');
@@ -109,7 +109,7 @@ export class App extends Component {
     }));
   }
 
-  inrementPage = () => {
+  incrementPage = () => {
     this.setState(prevState => ({
       page: prevState.page + 1,
     }));
@@ -119,11 +119,12 @@ export class App extends Component {
   resetForm = () => {
     this.setState({
       query: '',
+
     });
   };
 
    
- resetGallary = () => {
+ resetGallery = () => {
     this.setState({
       query: '',
       page: 1,
