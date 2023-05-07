@@ -54,7 +54,7 @@ export class App extends Component {
 
 
     
-    if (nextPage !== prevPage) {
+    if (nextPage !== prevPage && nextPage !== 1) {
       this.toggleLoading();
 
       try {
