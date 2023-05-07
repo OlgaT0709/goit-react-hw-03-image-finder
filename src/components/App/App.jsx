@@ -34,13 +34,19 @@ export class App extends Component {
     
     if (nextPage !== prevPage) {
       this.toggleLoading();
+
       try {
         const images = await apiService.fetchPhoto();
-        this.setState({
-          images: images.hits,
+        if (images.hits.length === 0) {
+          this.errorMessage();
 
-        });
-        console.log(this.state);
+        } else {
+          this.setState({
+            images: images.hits,
+
+          });
+          console.log(this.state);
+        }
       } catch (error) {
         catchError(error);
       }
@@ -53,9 +59,9 @@ export class App extends Component {
   onSubmitForm = (event) => {
     event.preventDefault();
     const value = event.target.query.value.toLowerCase().trim();
+    this.resetGallary();
     this.setState({
       query: value,
-      page: 1,
     },
       () => {
 
@@ -63,11 +69,13 @@ export class App extends Component {
           toast.error('Please enter your request.', {
             position: toast.POSITION.TOP_RIGHT
           });
+          this.resetGallary();
+
         } else {
-          console.log(this.state);
-          apiService.query = this.state.query;
-          this.inrementPage();
-          this.resetForm();
+            console.log(this.state);
+            apiService.query = this.state.query;
+            this.inrementPage();
+            this.resetForm();
          
         };
         
@@ -77,7 +85,7 @@ export class App extends Component {
   };
 
   errorMessage = () => {
-    toast.error('Incorrect request.', {
+    toast.error('Incorrect request , please try again.', {
         position: toast.POSITION.TOP_RIGHT
     })
   };
@@ -101,10 +109,20 @@ export class App extends Component {
   resetForm = () => {
     this.setState({
       query: '',
-      // page: 1,
     });
   };
 
+   
+ resetGallary = () => {
+    this.setState({
+      query: '',
+      page: 1,
+      showModal: false,
+      images: [],
+      isLoading: false,
+      largeImageUR: '',
+    });
+  };
  
   toggleLoading =() => {
     this.setState(state => ({
