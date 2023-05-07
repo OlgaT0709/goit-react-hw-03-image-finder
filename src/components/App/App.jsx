@@ -102,15 +102,7 @@ export class App extends Component {
     }
   }
 
-  // resetForm = () => {
-  //   this.setState({
-  //     query: '',
-  //     page: 1,
-  //     images: [],
-
-  //   });
-  // };
-
+  
    toggleLoading =() => {
     this.setState(({isLoading}) => ({
       isLoading: !isLoading,
