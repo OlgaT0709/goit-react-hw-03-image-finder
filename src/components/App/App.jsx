@@ -4,6 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { Container, GalleryContainer, LargeImage } from './App.styled';
 
+import { scrollElementHeight, scrollToTop } from '../../utils/scroll';
 import apiService from '../../data/apiService';
 import catchError from '../../utils/catcherror';
 import { Searchbar } from '../Searchbar';
@@ -23,60 +24,47 @@ export class App extends Component {
     largeImageURL: '',
    };
 
-  async componentDidMount() {
-   
-  }
+  async componentDidMount() { };
+
   async componentDidUpdate(prevProps, prevState) {
     const nextQuery = this.state.query;
     const prevQuery = prevState.query;
     const nextPage = this.state.page;
     const prevPage = prevState.page;
-
+    
+   
     if (nextQuery !== prevQuery && nextQuery !== "") {
        
-        this.toggleLoading();
-        apiService.query = nextQuery;
-        this.resetForm();
-          
-        try {
-          const images = await apiService.fetchPhoto();
-          console.log(images.hits.length);
-        //   if (images.hits.length === 0) {
-        //     toast.error('Please try again!', {
-        //     position: toast.POSITION.TOP_RIGHT
-        // })
-
-        //   } else {
-            this.updateImages(images);
-            console.log('componentDidUpdate QueryChanged после updateImages');
-            console.log(this.state);
-          // }
+      this.toggleLoading();
+      apiService.query = nextQuery;
+        
+      try {
+        const images = await apiService.fetchPhoto();
+        this.ifFaildMessage(images.hits.length);
+        this.updateImages(images);
+        scrollToTop();
+  
       } catch (error) {
         catchError(error);
-      }
+      };
       this.toggleLoading();
     } 
     
     if (nextPage !== prevPage && nextPage !== 1) {
       this.toggleLoading();
       apiService.pageNumber = nextPage;
-      try {
+      try { 
         const images = await apiService.fetchPhoto();
-        if (images.hits.length === 0) {
-          this.errorMessage();
-
-        } else {
-          this.updateImages(images);
-          console.log('componentDidUpdate PageChanged после updateImages');
-          console.log(this.state);
-        }
+        this.updateImages(images);
+        scrollElementHeight(2);
+   
       } catch (error) {
         catchError(error);
-      }
+      };
       this.toggleLoading();
     }
 
-  }
+  };
 
 
   onSubmitForm = (values) => {
@@ -92,44 +80,38 @@ export class App extends Component {
 
 
   onLoadMore = () => {
-    this.incrementPage()
-
-    // плавне прокручування сторінки після запиту і відтворення кожної наступної групи зображень
-    const refsGalleryContainer =  document.querySelector('#galleryContainer');
-    const { height: cardHeight } = refsGalleryContainer.firstElementChild.getBoundingClientRect();
-    window.scrollBy({
-        top: cardHeight * 1,
-        behavior: "smooth",
-    });
-
-         
-    
+    this.setState(prevState => ({
+      page: prevState.page + 1,
+    }));
   };
-
+    
   updateImages = (images) => {
     this.setState(prevState => ({
       images: prevState.images.concat(images.hits),
     }));
+
+
+  }
+  
+  ifFaildMessage = (length) => {
+   
+     if ( length === 0) {
+        toast.error('Please try again you rrequest!', {
+        position: toast.POSITION.TOP_RIGHT
+    })
+    }
   }
 
-  incrementPage = () => {
-    this.setState(prevState => ({
-      page: prevState.page + 1,
-    }));
-     }
+  // resetForm = () => {
+  //   this.setState({
+  //     query: '',
+  //     page: 1,
+  //     images: [],
 
-  resetForm = () => {
-    this.setState({
-      query: '',
-      page: 1,
-      images: [],
+  //   });
+  // };
 
-    });
-  };
-
-   
-
-  toggleLoading =() => {
+   toggleLoading =() => {
     this.setState(({isLoading}) => ({
       isLoading: !isLoading,
     }));

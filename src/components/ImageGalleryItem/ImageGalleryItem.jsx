@@ -4,11 +4,11 @@ import {ImageContainer , Image } from './ImageGalleryItem.styled';
 export const ImageGalleryItem = ({webformatURL, tags, largeImageURL, onOpenModal}) => {
     return (
         <ImageContainer >
-            <Image src={webformatURL}
-                alt={tags}
-                data-source={largeImageURL}
-                onClick={() => { onOpenModal(largeImageURL) }} />
-            {/* onClick={onOpenModal} /> */}
+            {webformatURL && (
+                <Image src={webformatURL}
+                    alt={tags}
+                    data-source={largeImageURL}
+                    onClick={() => { onOpenModal(largeImageURL) }} />)};
         </ImageContainer>
     );
 }
