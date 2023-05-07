@@ -20,7 +20,7 @@ export class App extends Component {
     showModal: false,
     images: [],
     isLoading: false,
-    largeImageUR: '',
+    largeImageURL: '',
    };
 
   async componentDidMount() {
@@ -41,10 +41,8 @@ export class App extends Component {
           this.errorMessage();
 
         } else {
-          this.setState({
-            images: images.hits,
-
-          });
+          this.updateImages(images);
+  
           console.log(this.state);
         }
       } catch (error) {
@@ -92,12 +90,24 @@ export class App extends Component {
 
   loadMore = () => {
     this.inrementPage()
-    window.scrollTo({
-      top: 0,
-      behaviour: 'smooth',
+
+    // плавне прокручування сторінки після запиту і відтворення кожної наступної групи зображень
+    const refsGalleryContainer =  document.querySelector('#galleryContainer');
+    const { height: cardHeight } = refsGalleryContainer.firstElementChild.getBoundingClientRect();
+    window.scrollBy({
+        top: cardHeight * 2,
+        behavior: "smooth",
     });
+
+         
     
   };
+
+  updateImages = (images) => {
+    this.setState(prevState => ({
+      images: prevState.images.concat(images.hits),
+    }));
+  }
 
   inrementPage = () => {
     this.setState(prevState => ({
@@ -120,7 +130,7 @@ export class App extends Component {
       showModal: false,
       images: [],
       isLoading: false,
-      largeImageUR: '',
+      largeImageURL: '',
     });
   };
  
@@ -143,7 +153,7 @@ export class App extends Component {
     return (
       <Container>
         <Searchbar onSubmitForm={this.onSubmitForm} />
-        <GalleryContainer>
+        <GalleryContainer id="galleryContainer">
           {images.length > 0 ? <ImageGallery images={images} toggleModal={this.toggleModal} /> : null }         
         </GalleryContainer>  
         {showModal && (
