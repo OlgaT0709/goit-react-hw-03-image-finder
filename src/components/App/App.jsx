@@ -41,7 +41,9 @@ export class App extends Component {
         try {
           const images = await apiService.fetchPhoto();
           if (images.hits.length === 0) {
-            this.errorMessage();
+            toast.error('Please try again!', {
+            position: toast.POSITION.TOP_RIGHT
+        })
 
           } else {
             this.updateImages(images);
