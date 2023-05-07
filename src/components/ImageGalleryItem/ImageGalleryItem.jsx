@@ -1,17 +1,22 @@
 import PropTypes from 'prop-types';
-import {ImageGalleryItem , Image } from './ImageGalleryItem.styled';
+import {ImageContainer , Image } from './ImageGalleryItem.styled';
 
-
-
-export const ImageCalleryItem = ({link, name}) => {
+export const ImageGalleryItem = ({webformatURL, tags, largeImageURL, onOpenModal}) => {
     return (
-        <ImageGalleryItem>
-            <Image src={link} alt={name} />
-        </ImageGalleryItem>
+        <ImageContainer >
+            <Image src={webformatURL}
+                alt={tags}
+                data-source={largeImageURL}
+                onClick={() => { onOpenModal(largeImageURL) }} />
+            {/* onClick={onOpenModal} /> */}
+        </ImageContainer>
     );
 }
 
-ImageCalleryItem.propTypes = {
-    link: PropTypes.string.isRequired, 
-    name: PropTypes.string.isRequired, 
+ImageGalleryItem.propTypes = {
+    tags: PropTypes.string.isRequired,
+    webformatURL: PropTypes.string.isRequired,
+    largeImageURL: PropTypes.string.isRequired,
+    onOpenModal: PropTypes.func,
+ 
 };

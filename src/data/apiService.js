@@ -4,13 +4,12 @@ import searchParamsStringify from '../utils/searchParamsStringify';
 const BASE_URL = 'https://pixabay.com/api/';
 const API_KEY = '34510807-7acb17c6314b40594d9f36171';
 
-//клас робить HTTP-запит на ресурс і повертає дані (об'єкт)
+//клас робить HTTP-запит на ресурс і повертає дані 
 
-class PhotoApiService {
+class ApiService {
     constructor() {
         this.searchQuery = '';
         this.pageNumber = 1;
-        this.viewedPhoto = 0;
         this.perPage = 12;
     }
 
@@ -20,8 +19,6 @@ class PhotoApiService {
         try {
             const response = await axios.get(queryString);
             const data = await response.data;
-            this.#incrementPage();
-            this.viewedPhoto += data.hits.length;
             return data;
         } catch (error) {
             throw new Error(error);
@@ -48,7 +45,7 @@ class PhotoApiService {
     };
 
 
-    #incrementPage() {
+    incrementPage() {
         this.pageNumber += 1;
     }
 
@@ -56,10 +53,7 @@ class PhotoApiService {
         this.pageNumber = 1;
     }
 
-    resetViewedPhoto() {
-        this.viewedPhoto = 0;
-    }
-
+    
     get query() {
         return this.searchQuery;
     }
@@ -71,5 +65,5 @@ class PhotoApiService {
 }
 
 
-export default new PhotoApiService();
+export default new ApiService();
 
