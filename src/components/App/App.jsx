@@ -125,22 +125,20 @@ export class App extends Component {
   };
  
   toggleLoading =() => {
-    this.setState(state => ({
-      isLoading: !state.isLoading,
+    this.setState(({isLoading}) => ({
+      isLoading: !isLoading,
     }));
   };
 
   toggleModal = (largeImageURL) => {
-  this.setState((state ) => ({
-    showModal: !state.showModal,
+  this.setState(({showModal}) => ({
+    showModal: !showModal,
     largeImageURL: largeImageURL, 
   }));
 };
      
   render() {
     const { images, showModal, isLoading, largeImageURL } = this.state;
-
-    // console.log(this.state);
  
     return (
       <Container>
