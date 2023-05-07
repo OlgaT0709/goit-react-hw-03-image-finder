@@ -64,8 +64,8 @@ export class App extends Component {
 
         } else {
           this.updateImages(images);
-          // console.log('componentDidUpdate PageChanged после updateImages');
-          // console.log(this.state);
+          console.log('componentDidUpdate PageChanged после updateImages');
+          console.log(this.state);
         }
       } catch (error) {
         catchError(error);
@@ -87,13 +87,8 @@ export class App extends Component {
   );
 };
 
-  errorMessage = () => {
-    toast.error('Incorrect request , please try again.', {
-        position: toast.POSITION.TOP_RIGHT
-    })
-  };
 
-  loadMore = () => {
+  onLoadMore = () => {
     this.incrementPage()
 
     // плавне прокручування сторінки після запиту і відтворення кожної наступної групи зображень
@@ -130,17 +125,7 @@ export class App extends Component {
   };
 
    
- resetGallery = () => {
-    this.setState({
-      query: '',
-      page: 1,
-      showModal: false,
-      images: [],
-      isLoading: false,
-      largeImageURL: '',
-    });
-  };
- 
+
   toggleLoading =() => {
     this.setState(({isLoading}) => ({
       isLoading: !isLoading,
@@ -168,7 +153,7 @@ export class App extends Component {
             <LargeImage src={largeImageURL}/>
           </Modal>
         )}
-        { images.length > 0 ? <Button onClickBtn={this.loadMore} /> : null}
+        { images.length > 0 ? <Button onClickBtn={this.onLoadMore} /> : null}
         {isLoading && <Loader />}
         <ToastContainer autoClose={2000} />
       </Container>
