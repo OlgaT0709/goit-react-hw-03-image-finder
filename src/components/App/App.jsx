@@ -56,7 +56,7 @@ export class App extends Component {
     
     if (nextPage !== prevPage && nextPage !== 1) {
       this.toggleLoading();
-
+      apiService.pageNumber = nextPage;
       try {
         const images = await apiService.fetchPhoto();
         if (images.hits.length === 0) {
@@ -118,8 +118,7 @@ export class App extends Component {
     this.setState(prevState => ({
       page: prevState.page + 1,
     }));
-    apiService.pageNumber = this.state.page
-  }
+     }
 
   resetForm = () => {
     this.setState({
