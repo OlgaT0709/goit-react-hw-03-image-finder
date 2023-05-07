@@ -26,33 +26,33 @@ export class App extends Component {
   async componentDidMount() {
    
   }
-
   async componentDidUpdate(prevProps, prevState) {
     const nextQuery = this.state.query;
     const prevQuery = prevState.query;
     const nextPage = this.state.page;
     const prevPage = prevState.page;
 
-    if (nextQuery !== prevQuery && nextQuery !== '') {
-      this.toggleLoading();
+    if (nextQuery !== prevQuery && nextQuery !== "") {
+       
+        this.toggleLoading();
+        apiService.query = nextQuery;
+        this.resetForm();
+          
+        try {
+          const images = await apiService.fetchPhoto();
+          if (images.hits.length === 0) {
+            this.errorMessage();
 
-      try {
-        const images = await apiService.fetchPhoto();
-        if (images.hits.length === 0) {
-          this.errorMessage();
-
-        } else {
-          this.updateImages(images);
-          console.log('componentDidUpdate QueryChanged после updateImages');
-          console.log(this.state);
-        }
+          } else {
+            this.updateImages(images);
+            console.log('componentDidUpdate QueryChanged после updateImages');
+            console.log(this.state);
+          }
       } catch (error) {
         catchError(error);
       }
       this.toggleLoading();
-    }
-
-
+    } 
     
     if (nextPage !== prevPage && nextPage !== 1) {
       this.toggleLoading();
@@ -77,29 +77,13 @@ export class App extends Component {
 
 
   onSubmitForm = (values) => {
-  const value = values.query?.toLowerCase()?.trim() || '';
-    this.resetGallery() 
-    console.log('onSubmitForm  после resetGallery');
-    console.log(this.state);
-  this.setState(
+      this.setState(
     {
-      query: value,
+      query: values.query,
+      page: 1,
+      images: [],
     },
-    () => {
-      console.log('onSubmitForm  после setStates');
-      console.log(this.state);
-      if (this.state.query === "") {
-        toast.error("Please enter your request.", {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-      } else {
-
-        apiService.query = this.state.query;
-        this.resetForm();
-      console.log('onSubmitForm  после resetForm');
-      console.log(this.state);
-      }
-    }
+    
   );
 };
 
@@ -140,6 +124,8 @@ export class App extends Component {
   resetForm = () => {
     this.setState({
       query: '',
+      page: 1,
+      images: [],
 
     });
   };
