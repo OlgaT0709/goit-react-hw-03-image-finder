@@ -8,7 +8,7 @@ export const ImageGalleryItem = ({webformatURL, tags, largeImageURL, onOpenModal
                 <Image src={webformatURL}
                     alt={tags}
                     data-source={largeImageURL}
-                    onClick={() => { onOpenModal(largeImageURL) }} />)};
+                    onClick={() => { onOpenModal(largeImageURL) }} />)}
         </ImageContainer>
     );
 }

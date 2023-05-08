@@ -22,6 +22,7 @@ export class App extends Component {
     images: [],
     isLoading: false,
     largeImageURL: '',
+    totalImages: 0,
    };
 
   async componentDidMount() { };
@@ -42,6 +43,7 @@ export class App extends Component {
         const images = await apiService.fetchPhoto();
         this.ifFaildMessage(images.hits.length);
         this.updateImages(images);
+        this.updateTotalImages(images);
         scrollToTop();
   
       } catch (error) {
@@ -66,11 +68,12 @@ export class App extends Component {
 
   };
 
-
+  
   onSubmitForm = (values) => {
       this.setState(
     {
       query: values.query,
+      totalImages: 0,
       page: 1,
       images: [],
     },
@@ -84,6 +87,14 @@ export class App extends Component {
       page: prevState.page + 1,
     }));
   };
+
+  updateTotalImages = (images) => {
+    this.setState(
+      {
+        totalImages: images.totalHits,
+
+      })
+  }
     
   updateImages = (images) => {
     this.setState(prevState => ({
@@ -117,8 +128,10 @@ export class App extends Component {
 };
      
   render() {
-    const { images, showModal, isLoading, largeImageURL } = this.state;
- 
+    const { totalImages, images, showModal, isLoading, largeImageURL } = this.state;
+    console.log(images.length);
+    console.log(totalImages);
+
     return (
       <Container>
         <Searchbar onSubmitForm={this.onSubmitForm} />
@@ -130,7 +143,7 @@ export class App extends Component {
             <LargeImage src={largeImageURL}/>
           </Modal>
         )}
-        { images.length > 0 ? <Button onClickBtn={this.onLoadMore} /> : null}
+        { images.length > 0 && images.length!== totalImages ? <Button onClickBtn={this.onLoadMore} /> : null}
         {isLoading && <Loader />}
         <ToastContainer autoClose={2000} />
       </Container>
