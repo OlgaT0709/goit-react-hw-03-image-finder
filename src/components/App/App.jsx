@@ -129,8 +129,6 @@ export class App extends Component {
      
   render() {
     const { totalImages, images, showModal, isLoading, largeImageURL } = this.state;
-    console.log(images.length);
-    console.log(totalImages);
 
     return (
       <Container>
